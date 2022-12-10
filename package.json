@@ -1,0 +1,17 @@
+{
+  "name": "zenn-contents",
+  "version": "1.0.0",
+  "description": "Zennに投稿する記事や本",
+  "author": "hyodoblog",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "zenn preview --port 3000",
+    "lint": "textlint *.md ./articles/**"
+  },
+  "dependencies": {
+    "textlint": "^12.2.4",
+    "textlint-rule-preset-ja-technical-writing": "^7.0.0",
+    "zenn-cli": "^0.1.133"
+  }
+}
