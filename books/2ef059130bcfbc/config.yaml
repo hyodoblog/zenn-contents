@@ -1,0 +1,39 @@
+title: "LINE文字起こしボット「文字起こしばりぐっどくん」を作ってみよう！"
+summary: |-
+  📘本について📘
+  この本は、現在リリース中の「文字起こしばりぐっどくん」の作り方を紹介する本です。
+  文字起こしばりぐっどくんとは、LINE公式アカウントに画像を送ると数秒で画像内にあるテキストを返信してくれるOCR LINEボットサービスです。
+
+  📗本書の内容&特徴📗
+  ・LINE Botで画像の取り扱い方
+  ・Google Cloud Visionの使い方
+  ・実アプリを例にした解説
+
+  ⚠注意点⚠
+  この本は教材ではなく、LINE公式アカウントと外部APIを組み合わせた事例紹介ですので以下の内容の説明はありませんのでご注意ください。
+  ・Firebaseの説明
+  ・Ngrokの開発方法
+  ・FirebaseをBlazeプランに上げるため、クレジットカードもってない方は実装できません
+  LINE BotとGoogle APIを組み合わせてFirebaseの初期設定
+
+  「Likes」または「ご寄付」頂けると幸いです。
+  寄付金は、ばりぐっどくんのAPI費に活用致します。
+
+  文字起こしばりぐっどくん：https://page.line.me/mojiokoshi?openQrModal=true
+  ばりぐっどくんハウス：https://varygoodkun.net
+topics:
+  - "line"
+  - "firebase"
+  - "ocr"
+  - "typescript"
+  - "nodejs"
+published: true
+price: 0
+toc_depth: 2
+chapters:
+  - "53e942"
+  - "6eddb1"
+  - "6a35ee"
+  - "810ca5"
+  - "b07bb0"
+  - "6274ea"
