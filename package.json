@@ -10,8 +10,8 @@
     "lint": "textlint *.md ./articles/**"
   },
   "dependencies": {
-    "textlint": "^12.5.1",
+    "textlint": "^13.3.0",
     "textlint-rule-preset-ja-technical-writing": "^7.0.0",
-    "zenn-cli": "^0.1.135"
+    "zenn-cli": "^0.1.137"
   }
 }
