@@ -1,6 +1,6 @@
 ---
 title: "LINE Botの環境構築"
-free: false
+free: true
 ---
 
 # 開発環境の構築
@@ -10,26 +10,25 @@ free: false
 
 https://zenn.dev/hyodoblog/articles/f3f97b25dc29c2
 
-クローンが完了しましたら、以下のコマンドでnode_modulesをインストールしてください。
+クローンが完了しましたら、以下のコマンドで node_modules をインストールしてください。
+
 ```bash
 cd functions
 yarn or npm i
 ```
 
-
 # デバッグ環境の構築
 
-デバッグにはNgrokを用います。
-LINE Bot開発においてNgrokは大変強力なツールなので、それだけのために月額課金するものありだと私は考えてます。（課金ユーザーです）
+デバッグには Ngrok を用います。
+LINE Bot 開発において Ngrok は大変強力なツールなので、それだけのために月額課金するものありだと私は考えてます。（課金ユーザーです）
 
 https://zenn.dev/hyodoblog/articles/c1b2d6f6135af7
 
-
-# Firebase Projectの新規作成
+# Firebase Project の新規作成
 
 こちらのセクションは各々で準備をお願いします。
 
-Firebase Projectが作成できたら、Firebase Project Idを`.firebaserc`ファイルに記載してください。
+Firebase Project が作成できたら、Firebase Project Id を`.firebaserc`ファイルに記載してください。
 
 ```json
 {
@@ -42,17 +41,15 @@ Firebase Projectが作成できたら、Firebase Project Idを`.firebaserc`フ�
 その他以下の設定をこの時点でお願いします。
 
 - ロケーション設定
-- Blazeプランへのアップグレード（FunctionsはBlazeプランでないと使用できないため）
+- Blaze プランへのアップグレード（Functions は Blaze プランでないと使用できないため）
 - 予算設定（設定してないと知らない間にユーザーが増えてた際の支払いが多くなるため）
 
+# LINE Messaging API の初期設定
 
-# LINE Messaging APIの初期設定
-
-1. LINE Messaging APIをLINE Developer Consoleにて作成する。（この手順は省略します）
-2. `チャネルアクセストークン`と`チャネルシークレット`をコピーする。 
+1. LINE Messaging API を LINE Developer Console にて作成する。（この手順は省略します）
+2. `チャネルアクセストークン`と`チャネルシークレット`をコピーする。
 3. `functions/.env.example`ファイルをコピーし、`functions/.env`ファイルを作成する。
 4. `LINE_MESSAGING_CHANNEL_ACCESS_TOKEN`に`チャネルアクセストークン`を、 `LINE_MESSAGING_CHANNEL_SECRET`に`チャネルシークレット`を設定する。
-
 
 # デプロイ
 
@@ -61,7 +58,7 @@ Firebase Projectが作成できたら、Firebase Project Idを`.firebaserc`フ�
 
 ```bash
 yarn build && firebase deploy
-or 
+or
 npm run build && firebase deploy
 ```
 
