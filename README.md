@@ -4,7 +4,7 @@
 
 # 記事の提案や修正について
 
-書いて欲しい記事がある場合や、投稿されている記事に誤りなどがある場合は、お気軽に Issue、PR を送って頂いて大丈夫です 👌
+書いて欲しい記事がある場合や、投稿されている記事に誤りなどがある場合は、お気軽に Issue、PR を送って頂いて大丈夫です 👌。
 
 ## Installation
 
@@ -33,7 +33,7 @@ npm run preview
 
 ### Lint
 
-[textint](https://github.com/textlint/textlint) によるLintを実行します。
+[textint](https://github.com/textlint/textlint) による Lint を実行します。
 
 ```
 npm run textlint
@@ -45,10 +45,8 @@ npm run textlint
 2. 記事や本で使用している画像や文章は、[クリエイティブ・コモンズ 表示 - 非営利 4.0 国際 ライセンス](https://creativecommons.org/licenses/by-nc/4.0/) とします。
 3. 引用している個所については、引用元のライセンスに帰属します。
 
-
 # zenn-contents
 
 [Zenn](https://zenn.dev/azukiazusa) へ投稿される記事を管理するためのレポジトリです。
 
-小さなtypoなどの修正も歓迎しています！
-
+小さな typo などの修正も歓迎しています。
