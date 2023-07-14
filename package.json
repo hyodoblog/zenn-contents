@@ -6,12 +6,9 @@
   "license": "UNLICENSE",
   "private": true,
   "scripts": {
-    "dev": "zenn preview --port 3000",
-    "lint": "textlint *.md ./articles/**,./books/**"
+    "dev": "zenn preview --port 3000"
   },
   "dependencies": {
-    "textlint": "^13.3.2",
-    "textlint-rule-preset-ja-technical-writing": "^7.0.0",
-    "zenn-cli": "^0.1.142"
+    "zenn-cli": "^0.1.144"
   }
 }
