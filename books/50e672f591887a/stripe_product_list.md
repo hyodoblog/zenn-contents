@@ -51,4 +51,139 @@ export const getProducts = async (): Promise<Stripe.Product[]> => {
 
 `getProducts`関数を使えば、Stripe ダッシュボードに追加した商品情報を一括で取得ができます。
 
-### LINE 上から取得できるようにする
+### LINE 公式アカウントと連携
+
+次は、LINE 公式アカウントから商品情報を取得できるようにします。
+
+商品情報を取得する関数のために以下のファイルを作成してください。
+
+- `src/routes/line-bot/handlers/postback/index.ts`
+- `src/routes/line-bot/handlers/postback/products/index.ts`
+- `src/routes/line-bot/handlers/postback/products/list.ts`
+
+それぞれのファイルの役割は以下の通りです。
+
+- `postback/index.ts`：`postback`イベントを処理する
+- `postback/products/index.ts`：商品関係の関数を呼び出す
+- `postback/products/list.ts`：商品一覧を取得する
+
+それではコードを記述していきます。
+
+`src/routes/line-bot/handlers/postback/products/list.ts`ファイルに以下のコードを記述します。
+
+```ts
+import { PostbackEvent } from "@line/bot-sdk";
+import { lineClient } from "~/clients/line.client";
+import { errorConsole } from "~/utils/util";
+import { MsgProductList, msgProducts } from "~/notice-messages/products";
+import { getProducts } from "~/domains/product.domain";
+import { stripeClient } from "~/clients/stripe.client";
+
+export const postbackProductsListHandler = async (
+  event: PostbackEvent
+): Promise<void> => {
+  try {
+    const products = await getProducts();
+
+    const _products: MsgProductList[] = [];
+
+    await Promise.all(
+      products.map(async (product) => {
+        if (typeof product.default_price !== "string") {
+          return;
+        }
+
+        const price = await stripeClient.prices.retrieve(product.default_price);
+        _products.push({
+          productId: product.id,
+          priceId: price.id,
+          name: product.name,
+          imgUrl: product.images[0],
+          amount: Number(price.unit_amount),
+        });
+      })
+    );
+
+    await lineClient.replyMessage(event.replyToken, msgProducts(_products));
+  } catch (err) {
+    errorConsole(err);
+    throw new Error("postback products list handler");
+  }
+};
+```
+
+`src/routes/line-bot/handlers/postback/products/index.ts`ファイルに以下のコードを記述します。
+
+```ts
+import { PostbackEvent } from "@line/bot-sdk";
+import { errorConsole } from "~/utils/util";
+import { postbackProductsListHandler } from "./list";
+
+export const postbackProductsHandler = async (
+  event: PostbackEvent
+): Promise<void> => {
+  try {
+    const { data } = event.postback;
+
+    if (data === "products") {
+      return await postbackProductsListHandler(event);
+    }
+  } catch (err) {
+    errorConsole(err);
+    throw new Error("postback products handler");
+  }
+};
+```
+
+`src/routes/line-bot/handlers/postback/index.ts`ファイルに以下のコードを記述します。
+
+```ts
+import { PostbackEvent } from "@line/bot-sdk";
+import { errorConsole } from "~/utils/util";
+import { postbackMypageHandler } from "./mypage";
+import { postbackProductsHandler } from "./products";
+
+export const postbackHandler = async (event: PostbackEvent): Promise<void> => {
+  try {
+    const { data } = event.postback;
+    if (data.includes("products")) {
+      return await postbackProductsHandler(event);
+    }
+  } catch (err) {
+    errorConsole(err);
+    throw new Error("postback handler");
+  }
+};
+```
+
+次に、`postback`処理を呼び出すために`src/routes/line-bot/handlers/index.ts`ファイルを以下のように編集します。
+`postbackHandler`関数を追加します。
+
+```ts
+import { WebhookEvent } from "@line/bot-sdk";
+import { lineClient } from "~/clients/line.client";
+import { msgError } from "~/notice-messages/error";
+
+import { followHandler } from "./follow";
+import { errorConsole } from "~/utils/util";
+import { postbackHandler } from "./postback";
+
+export const handlers = async (event: WebhookEvent): Promise<void> => {
+  try {
+    switch (event.type) {
+      case "follow":
+        return await followHandler(event);
+      case "postback":
+        return await postbackHandler(event);
+    }
+  } catch (err) {
+    lineClient.pushMessage(event.source.userId!, msgError).catch;
+    errorConsole(err);
+    throw new Error("handlers");
+  }
+};
+```
+
+これでリッチメニューの「商品一覧」ボタンを押したとき、Stripe の商品に登録した情報が以下のように商品一覧が表示されます。
+
+![](https://storage.googleapis.com/zenn-user-upload/e6b48ae1fb18-20230909.jpg =300x)
