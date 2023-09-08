@@ -60,8 +60,90 @@ export const postbackMypageHandler = async (
 };
 ```
 
-`src/notice-messages`ファイルに以下を追記します。
+`src/routes/line-bot/handlers/postback/index.ts`ファイルを以下のように編集する。
 
 ```ts
+import { PostbackEvent } from "@line/bot-sdk";
+import { errorConsole } from "~/utils/util";
+import { postbackMypageHandler } from "./mypage"; /* ここを追記 */
+import { postbackProductsHandler } from "./products";
 
+export const postbackHandler = async (event: PostbackEvent): Promise<void> => {
+  try {
+    const { data } = event.postback;
+    if (data.includes("products")) {
+      return await postbackProductsHandler(event);
+    }
+    /* ここから追記 */
+    if (data === "mypage") {
+      return await postbackMypageHandler(event);
+    }
+    /* ここまで追記 */
+  } catch (err) {
+    errorConsole(err);
+    throw new Error("postback handler");
+  }
+};
 ```
+
+`src/notice-messages/mypage.ts`ファイルを作成し、以下を追記します。
+
+```ts
+import { FlexBubble, FlexMessage } from "@line/bot-sdk";
+
+export const msgMypage = (uri: string): FlexMessage => {
+  const contents: FlexBubble = {
+    type: "bubble",
+    direction: "ltr",
+    header: {
+      type: "box",
+      layout: "vertical",
+      contents: [
+        {
+          type: "text",
+          text: "有効期限は1時間です。",
+          weight: "regular",
+          align: "center",
+          wrap: true,
+        },
+      ],
+    },
+    footer: {
+      type: "box",
+      layout: "horizontal",
+      contents: [
+        {
+          type: "button",
+          action: {
+            type: "uri",
+            label: "マイページを見る",
+            uri,
+          },
+          color: "#003CF0",
+          style: "primary",
+        },
+      ],
+    },
+    styles: {
+      header: {
+        separator: false,
+      },
+      footer: {
+        separator: false,
+      },
+    },
+  };
+
+  return {
+    type: "flex",
+    altText: "マイページを見る",
+    contents,
+  };
+};
+```
+
+これで、リッチメニューの「注文履歴」ボタンを押すと、Billing カスタマーポータルの URL 遷移ボタンが表示されるようになります。
+
+![](https://storage.googleapis.com/zenn-user-upload/4cc68cd73d2a-20230909.jpg =300x)
+
+以上、注文履歴の実装は完了です。
