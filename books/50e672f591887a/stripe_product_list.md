@@ -143,7 +143,7 @@ export const msgProducts = (products: MsgProductList[]): FlexMessage => {
               type: "postback",
               label: "単体で購入する",
               displayText: "単体で購入する。",
-              data: `products.good.${product.priceId}`,
+              data: `products.one-time.${product.priceId}`,
             },
             color: "#003CF0FF",
             style: "primary",
@@ -335,7 +335,7 @@ export const msgProduct = (product: MsgProduct): FlexMessage => {
           product.goodAmount
         ).toLocaleString()})`,
         text: "単体で購入する。",
-        data: `products.good.${product.goodPriceId}`,
+        data: `products.one-time.${product.goodPriceId}`,
       },
       color: "#003CF0",
       style: "primary",
@@ -350,7 +350,7 @@ export const msgProduct = (product: MsgProduct): FlexMessage => {
           product.serviceAmount
         ).toLocaleString()})`,
         text: "定期購入する。",
-        data: `products.service.${product.servicePriceId}`,
+        data: `products.regular.${product.servicePriceId}`,
       },
       color: "#001E77",
       style: "primary",
