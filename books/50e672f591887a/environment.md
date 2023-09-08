@@ -1,3 +1,89 @@
 ---
 title: "環境変数の用意"
 ---
+
+## 環境変数を設定
+
+`.env.example`ファイルをコピーし`.env`ファイルを作成する。
+
+- LINE_MESSAGING_CHANNEL_ACCESS_TOKEN
+- LINE_MESSAGING_CHANNEL_SECRET
+- LINE_FRIEND_URL
+- STRIPE_SECRET_KEY
+- STRIPE_WEBHOOK_SECRET
+
+上記 4 つのキーを LINE Developers Console と Stripe Dashboard から取得します。
+
+## LINE Messaging API トークン発行方法
+
+https://www.youtube.com/watch?v=lQivbzuYdiM
+
+1. [LINE Developer Console](https://developers.line.biz/console/)にアクセス
+2. プロバイダーを作成
+3. Messaging API を作成
+4. チャネルアクセストークンとチャネルシークレットを発行
+
+## LINE 公式アカウントの友だち追加 URL を取得
+
+1. ![](https://storage.googleapis.com/zenn-user-upload/22fc74438a31-20230908.png)
+
+2. ![](https://storage.googleapis.com/zenn-user-upload/4f71d255a4d5-20230908.png)
+
+3. ![](https://storage.googleapis.com/zenn-user-upload/b9d5a25adb84-20230908.png)
+
+4. `.env`ファイル内の`LINE_FRIEND_URL`に設定
+
+## Stripe シークレットキーの発行方法
+
+https://www.youtube.com/watch?v=AmguoMbHQy4
+
+1. [Stripe Dashboard](https://dashboard.stripe.com/dashboard/)にアクセス
+2. アカウントを作成
+3. シークレットキーを発行
+4. アクセストークンを発行
+5. `.env`ファイル内の`LINE_MESSAGING_CHANNEL_SECRET`と`LINE_MESSAGING_CHANNEL_ACCESS_TOKEN`に設定
+
+## Stripe Webhook の著名キーを発行
+
+https://www.youtube.com/watch?v=4ioVGxG8sQ0
+
+1. Stripe ダッシュボードより Webhook を 1 つ設定する。
+
+- エンドポイント URL は、仮で「https://example.com」を設定する。（stripeWebhook関数をこの後作成し、Functionsにデプロイしたエンドポイントを設定します。）
+- イベントに設定する。
+  - customer.subscription.created
+  - customer.subscription.deleted
+  - invoice.payment_succeeded
+
+2. 著名コードを発行
+3. `.env`ファイル内の`STRIPE_WEBHOOK_SECRET`に著名コードを設定
+
+上記で発行したキーを以下に設定します。
+
+```bash
+LINE_MESSAGING_CHANNEL_ACCESS_TOKEN=
+LINE_MESSAGING_CHANNEL_SECRET=
+LINE_FRIEND_URL=
+
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+```
+
+以上で環境構築は完了です。
+
+## ローカルでの動作確認
+
+環境変数が設定完了したら、ローカルで動作確認を行います。
+以下のコマンドをターミナルに入力してください。
+
+```bash
+npm run dev
+```
+
+以下のようなログが出力されたら成功です。
+
+```bash
+App listening at http://localhost:5001
+```
+
+それでは中身の実装を進めていきます。
