@@ -1,0 +1,9 @@
+title: "LINE✕StripeでECボットを作ってみよう！"
+summary: "DBを利用せずStripeの情報を軸に、LINE✕ECボットを作る本です。"
+topics: ["line", "stripe", "ec"]
+published: false
+price: 5000 # 有料の場合200〜5000
+# 本に含めるチャプターを順番に並べましょう
+chapters:
+  - init
+  - example2
