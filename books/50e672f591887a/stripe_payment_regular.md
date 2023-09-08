@@ -104,6 +104,44 @@ export const postbackProductsRegularHandler = async (
 };
 ```
 
+`src/routes/line-bot/handlers/postback/products/index.ts`ファイルを以下のように編集します。
+
+```ts
+import { PostbackEvent } from "@line/bot-sdk";
+import { errorConsole } from "~/utils/util";
+import { postbackProductsDetailHandler } from "./detail";
+import { postbackProductsOneTimeHandler } from "./one-time";
+import { postbackProductsListHandler } from "./list";
+import { postbackProductsRegularHandler } from "./regular"; /* -- 追加 -- */
+
+export const postbackProductsHandler = async (
+  event: PostbackEvent
+): Promise<void> => {
+  try {
+    const { data } = event.postback;
+
+    if (data === "products") {
+      return await postbackProductsListHandler(event);
+    } else if (data.includes("products.")) {
+      const [, productType, priceId] = data.split(".");
+      switch (productType) {
+        case "detail":
+          return await postbackProductsDetailHandler(event, priceId);
+        case "one-time":
+          return await postbackProductsOneTimeHandler(event, priceId);
+        /* -- 追加 -- */
+        case "regular":
+          return await postbackProductsRegularHandler(event, priceId);
+        /* --------- */
+      }
+    }
+  } catch (err) {
+    errorConsole(err);
+    throw new Error("postback products handler");
+  }
+};
+```
+
 これで商品一覧の「詳細を見る」ボタンを押した後、「定期購入する」ボタンを押すと、定期購入の決済画面に遷移します。
 
 ![](https://storage.googleapis.com/zenn-user-upload/9bbb6b3397fe-20230909.jpg =300x)
