@@ -2,6 +2,10 @@
 title: "定期購入処理の実装"
 ---
 
+こちらのセクションでは、定期購入処理の実装を紹介します。
+
+## 定期購入関数の紹介
+
 定期購入処理の実装は、Stripe Checkout Session API を使って実装します。
 
 まず、Stripe Checkout Session API て決済 URL を発行する方法を紹介します。
