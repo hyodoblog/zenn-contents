@@ -473,7 +473,7 @@ export const postbackProductsDetailHandler = async (
 };
 ```
 
-`src/routes/line-bot/handlers/postback/products/index.ts`ファイルに以下のコードを記述します。
+`src/routes/line-bot/handlers/postback/products/index.ts`ファイルに以下のコードを上書きします。
 
 ```ts
 import { PostbackEvent } from "@line/bot-sdk";
@@ -490,10 +490,10 @@ export const postbackProductsHandler = async (
     if (data === "products") {
       return await postbackProductsListHandler(event);
     } else if (data.includes("products.")) {
-      const [, productType, id] = data.split(".");
+      const [, productType, priceId] = data.split(".");
       switch (productType) {
         case "detail":
-          return await postbackProductsDetailHandler(event, id);
+          return await postbackProductsDetailHandler(event, priceId);
       }
     }
   } catch (err) {
@@ -502,3 +502,9 @@ export const postbackProductsHandler = async (
   }
 };
 ```
+
+これで商品一覧の「詳細を見る」ボタンを押すと、Stripe に登録した商品の詳細が表示されます。
+
+![](https://storage.googleapis.com/zenn-user-upload/044f92ddef3a-20230909.jpg =300x)
+
+それでは次から決済処理を実装していきます。
