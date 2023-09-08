@@ -51,23 +51,130 @@ export const getProducts = async (): Promise<Stripe.Product[]> => {
 
 `getProducts`関数を使えば、Stripe ダッシュボードに追加した商品情報を一括で取得ができます。
 
-### LINE 公式アカウントと連携
-
 次は、LINE 公式アカウントから商品情報を取得できるようにします。
-
 商品情報を取得する関数のために以下のファイルを作成してください。
 
 - `src/routes/line-bot/handlers/postback/index.ts`
 - `src/routes/line-bot/handlers/postback/products/index.ts`
 - `src/routes/line-bot/handlers/postback/products/list.ts`
+- `src/notice-messages/products.ts`
 
 それぞれのファイルの役割は以下の通りです。
 
 - `postback/index.ts`：`postback`イベントを処理する
 - `postback/products/index.ts`：商品関係の関数を呼び出す
 - `postback/products/list.ts`：商品一覧を取得する
+- `notice-messages/products.ts`：商品一覧を表示する LINE フレックスメッセージ
 
 それではコードを記述していきます。
+
+`src/notice-messages/products.ts`ファイルに以下のコードを記述します。
+
+```ts
+import { FlexBubble, FlexCarousel, FlexMessage } from "@line/bot-sdk";
+
+export interface MsgProductList {
+  productId: string;
+  priceId: string;
+  name: string;
+  imgUrl: string;
+  amount: number;
+}
+
+export const msgProducts = (products: MsgProductList[]): FlexMessage => {
+  const productContents: FlexBubble[] = [];
+
+  for (const product of products) {
+    productContents.push({
+      type: "bubble",
+      size: "kilo",
+      hero: {
+        type: "image",
+        url: product.imgUrl,
+        size: "full",
+        aspectRatio: "1:1",
+        aspectMode: "cover",
+      },
+      body: {
+        type: "box",
+        layout: "vertical",
+        spacing: "sm",
+        contents: [
+          {
+            type: "text",
+            text: product.name,
+            weight: "bold",
+            size: "xl",
+            wrap: false,
+          },
+          {
+            type: "box",
+            layout: "baseline",
+            contents: [
+              {
+                type: "text",
+                text: `¥${Number(product.amount).toLocaleString()}`,
+                weight: "bold",
+                size: "xl",
+                flex: 0,
+                wrap: true,
+              },
+              {
+                type: "text",
+                text: "(税込)",
+                weight: "bold",
+                size: "sm",
+                flex: 0,
+                margin: "md",
+                wrap: true,
+              },
+            ],
+          },
+        ],
+      },
+      footer: {
+        type: "box",
+        layout: "vertical",
+        spacing: "md",
+        contents: [
+          {
+            type: "button",
+            action: {
+              type: "postback",
+              label: "単体で購入する",
+              displayText: "単体で購入する。",
+              data: `products.good.${product.priceId}`,
+            },
+            color: "#003CF0FF",
+            style: "primary",
+          },
+          {
+            type: "button",
+            action: {
+              type: "postback",
+              label: "詳細を見る",
+              displayText: "詳細を見る。",
+              data: `products.detail.${product.productId}`,
+            },
+            style: "secondary",
+          },
+        ],
+      },
+    });
+  }
+
+  const contents: FlexCarousel = {
+    type: "carousel",
+    contents: productContents,
+  };
+
+  return {
+    type: "flex",
+    altText: "商品一覧を見る",
+    contents,
+  };
+};
+```
 
 `src/routes/line-bot/handlers/postback/products/list.ts`ファイルに以下のコードを記述します。
 
@@ -187,3 +294,211 @@ export const handlers = async (event: WebhookEvent): Promise<void> => {
 これでリッチメニューの「商品一覧」ボタンを押したとき、Stripe の商品に登録した情報が以下のように商品一覧が表示されます。
 
 ![](https://storage.googleapis.com/zenn-user-upload/e6b48ae1fb18-20230909.jpg =300x)
+
+### 商品詳細取得の実装
+
+次に商品詳細を表示するために、以下のファイルを作成してください。
+
+- `src/routes/line-bot/handlers/postback/products/detail.ts`
+- `src/notice-messages/product.ts`
+
+それぞれのファイルの役割は以下の通りです。
+
+- `postback/products/detail.ts`：商品詳細を取得する
+- `notice-messages/product.ts`：商品詳細を表示する LINE フレックスメッセージ
+
+それではコードを記述していきます。
+
+`src/notice-messages/product.ts`ファイルに以下のコードを記述します。
+
+```ts
+import { FlexBubble, FlexComponent, FlexMessage } from "@line/bot-sdk";
+
+export interface MsgProduct {
+  name: string;
+  imgUrl: string;
+  description: string;
+  goodAmount: number | null;
+  serviceAmount: number | null;
+  goodPriceId: string | null;
+  servicePriceId: string | null;
+}
+
+export const msgProduct = (product: MsgProduct): FlexMessage => {
+  const footerContents: FlexComponent[] = [];
+  if (product.goodPriceId !== null && product.goodAmount !== null) {
+    footerContents.push({
+      type: "button",
+      action: {
+        type: "postback",
+        label: `単体で購入する(¥${Number(
+          product.goodAmount
+        ).toLocaleString()})`,
+        text: "単体で購入する。",
+        data: `products.good.${product.goodPriceId}`,
+      },
+      color: "#003CF0",
+      style: "primary",
+    });
+  }
+  if (product.servicePriceId !== null && product.serviceAmount !== null) {
+    footerContents.push({
+      type: "button",
+      action: {
+        type: "postback",
+        label: `定期購入する(¥${Number(
+          product.serviceAmount
+        ).toLocaleString()})`,
+        text: "定期購入する。",
+        data: `products.service.${product.servicePriceId}`,
+      },
+      color: "#001E77",
+      style: "primary",
+    });
+  }
+
+  const contents: FlexBubble = {
+    type: "bubble",
+    size: "giga",
+    direction: "ltr",
+    hero: {
+      type: "image",
+      url: product.imgUrl,
+      size: "full",
+      aspectRatio: "1.51:1",
+      aspectMode: "fit",
+    },
+    body: {
+      type: "box",
+      layout: "vertical",
+      contents: [
+        {
+          type: "spacer",
+          size: "xs",
+        },
+        {
+          type: "text",
+          text: product.name,
+          weight: "bold",
+          size: "xl",
+          align: "start",
+        },
+        {
+          type: "text",
+          text: product.description,
+          align: "start",
+          wrap: true,
+        },
+        {
+          type: "spacer",
+          size: "xs",
+        },
+      ],
+    },
+    footer: {
+      type: "box",
+      layout: "vertical",
+      spacing: "md",
+      margin: "md",
+      contents: footerContents,
+    },
+  };
+
+  return {
+    type: "flex",
+    altText: "商品詳細を見る",
+    contents,
+  };
+};
+```
+
+`src/routes/line-bot/handlers/postback/products/detail.ts`ファイルに以下のコードを記述します。
+
+```ts
+import { PostbackEvent } from "@line/bot-sdk";
+import Stripe from "stripe";
+import { lineClient } from "~/clients/line.client";
+import { errorConsole } from "~/utils/util";
+import { msgProduct, MsgProduct } from "~/notice-messages/product";
+import { stripeClient } from "~/clients/stripe.client";
+import { getPricesByProductId } from "~/domains/price.domain";
+
+const getGoogItemByPrices = (
+  prices: Stripe.Price[]
+): { goodPriceId: string | null; goodPriceAmount: number | null } => {
+  const price = prices.filter((price) => price.type === "one_time")[0];
+  if (price === undefined) {
+    return { goodPriceId: null, goodPriceAmount: null };
+  } else {
+    return { goodPriceId: price.id, goodPriceAmount: price.unit_amount };
+  }
+};
+
+const getServiceItemByPrices = (
+  prices: Stripe.Price[]
+): { servicePriceId: string | null; servicePriceAmount: number | null } => {
+  const price = prices.filter((price) => price.type === "recurring")[0];
+  if (price === undefined) {
+    return { servicePriceId: null, servicePriceAmount: null };
+  } else {
+    return { servicePriceId: price.id, servicePriceAmount: price.unit_amount };
+  }
+};
+
+export const postbackProductsDetailHandler = async (
+  event: PostbackEvent,
+  productId: string
+): Promise<void> => {
+  try {
+    const _product = await stripeClient.products.retrieve(productId);
+    const prices = await getPricesByProductId(productId);
+    const goodItem = getGoogItemByPrices(prices);
+    const serviceItem = getServiceItemByPrices(prices);
+
+    const product: MsgProduct = {
+      name: _product.name,
+      imgUrl: _product.images[0],
+      description: _product.description || "説明がありません。",
+      goodAmount: goodItem.goodPriceAmount,
+      serviceAmount: serviceItem.servicePriceAmount,
+      goodPriceId: goodItem.goodPriceId,
+      servicePriceId: serviceItem.servicePriceId,
+    };
+
+    await lineClient.replyMessage(event.replyToken, msgProduct(product));
+  } catch (err) {
+    errorConsole(err);
+    throw new Error("postback products detail handler");
+  }
+};
+```
+
+`src/routes/line-bot/handlers/postback/products/index.ts`ファイルに以下のコードを記述します。
+
+```ts
+import { PostbackEvent } from "@line/bot-sdk";
+import { errorConsole } from "~/utils/util";
+import { postbackProductsDetailHandler } from "./detail";
+import { postbackProductsListHandler } from "./list";
+
+export const postbackProductsHandler = async (
+  event: PostbackEvent
+): Promise<void> => {
+  try {
+    const { data } = event.postback;
+
+    if (data === "products") {
+      return await postbackProductsListHandler(event);
+    } else if (data.includes("products.")) {
+      const [, productType, id] = data.split(".");
+      switch (productType) {
+        case "detail":
+          return await postbackProductsDetailHandler(event, id);
+      }
+    }
+  } catch (err) {
+    errorConsole(err);
+    throw new Error("postback products handler");
+  }
+};
+```
