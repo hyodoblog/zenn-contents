@@ -110,3 +110,10 @@ export const postbackProductsOneTimeHandler = async (
   }
 };
 ```
+
+これで、単発購入処理の実装は完了です。
+商品一覧の「単発で購入する」ボタンより、決済画面に遷移することができます。
+
+![](https://storage.googleapis.com/zenn-user-upload/734fcae90aa9-20230909.jpg =300x)
+
+以上で、単発決済の実装は完了です。

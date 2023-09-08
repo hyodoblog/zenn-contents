@@ -103,3 +103,9 @@ export const postbackProductsRegularHandler = async (
   }
 };
 ```
+
+これで商品一覧の「詳細を見る」ボタンを押した後、「定期購入する」ボタンを押すと、定期購入の決済画面に遷移します。
+
+![](https://storage.googleapis.com/zenn-user-upload/9bbb6b3397fe-20230909.jpg =300x)
+
+以上で、定期購入処理の実装は完了です。
