@@ -8,6 +8,7 @@ chapters:
   - process
   - environment
   - rich-menu
+  - stripe_init
   - stripe_product_list
   - stripe_payment_onetime
   - stripe_payment_regular
