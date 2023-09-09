@@ -146,6 +146,12 @@ export const msgMypage = (uri: string): FlexMessage => {
 
 ![](https://storage.googleapis.com/zenn-user-upload/4cc68cd73d2a-20230909.jpg =300x)
 
+もし以下のようなエラーが出た場合は、[こちら](https://dashboard.stripe.com/test/settings/billing/portal.)をクリックして「有効化」をしてください。
+
+:::message alert
+You can’t create a portal session in test mode until you save your customer portal settings in test mode at https://dashboard.stripe.com/test/settings/billing/portal.
+:::
+
 以上、注文履歴の実装は完了です。
 
 ここまでのコードは、以下のコミットで確認できます。
