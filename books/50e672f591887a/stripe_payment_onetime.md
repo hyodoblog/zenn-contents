@@ -53,6 +53,32 @@ const purchase = async (
 
 それでは、実際に実装していきます。
 
+`src/domains/customer.domain.ts`ファイルを作成し、以下のように実装します。
+
+```ts
+import Stripe from "stripe";
+import { lineClient } from "~/clients/line.client";
+import { stripeClient } from "~/clients/stripe.client";
+
+export const getCustomer = async (userId: string): Promise<Stripe.Customer> => {
+  const { data } = await stripeClient.customers.search({
+    query: `metadata['userId']:'${userId}'`,
+  });
+  if (data.length === 0) {
+    const lineProfile = await lineClient.getProfile(userId);
+    return await stripeClient.customers.create({
+      name: lineProfile.displayName || "未設定",
+      description: userId,
+      metadata: {
+        userId,
+      },
+    });
+  } else {
+    return data[0];
+  }
+};
+```
+
 `src/routes/line-bot/handlers/postback/products/one-time.ts`
 
 ```ts
@@ -128,7 +154,9 @@ export const postbackProductsHandler = async (
 
     if (data === "products") {
       return await postbackProductsListHandler(event);
-    } else if (data.includes("products.")) {
+    }
+
+    if (data.includes("products.")) {
       const [, productType, priceId] = data.split(".");
       switch (productType) {
         case "detail":
@@ -208,3 +236,7 @@ export const msgPurchase = (uri: string): FlexMessage => {
 ![](https://storage.googleapis.com/zenn-user-upload/734fcae90aa9-20230909.jpg =300x)
 
 以上で、単発決済の実装は完了です。
+
+ここまでのコードは、以下のコミットで確認できます。
+
+https://github.com/hyodoblog/line-stripe-not-db-ec/commit/7a7eee822a73ef3c1b7d6990beada6bda86417dc

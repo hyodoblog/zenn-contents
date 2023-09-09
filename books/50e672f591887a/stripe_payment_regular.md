@@ -122,7 +122,9 @@ export const postbackProductsHandler = async (
 
     if (data === "products") {
       return await postbackProductsListHandler(event);
-    } else if (data.includes("products.")) {
+    }
+
+    if (data.includes("products.")) {
       const [, productType, priceId] = data.split(".");
       switch (productType) {
         case "detail":

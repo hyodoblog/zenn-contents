@@ -517,13 +517,16 @@ export const postbackProductsHandler = async (
 
     if (data === "products") {
       return await postbackProductsListHandler(event);
-    } else if (data.includes("products.")) {
+    }
+    /* -- 追加 -- */
+    if (data.includes("products.")) {
       const [, productType, priceId] = data.split(".");
       switch (productType) {
         case "detail":
           return await postbackProductsDetailHandler(event, priceId);
       }
     }
+    /* -------- */
   } catch (err) {
     errorConsole(err);
     throw new Error("postback products handler");
