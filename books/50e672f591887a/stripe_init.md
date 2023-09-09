@@ -24,3 +24,7 @@ stripe の`apiVersion`は年に 1,2 回更新があります。
 ライブラリーを最新版にしても、こちらのバージョンを変更しない限り最新版の API を利用することはできないため新機能の利用には注意が必要です。
 
 以降のセクションでは、`stripeClient`メソッドを使って Stripe API を利用します。
+
+現状のコミットは以下になります。
+
+https://github.com/hyodoblog/line-stripe-not-db-ec/commit/031854d5018ee1ddb17c6cbc495c7d07c1a74305

@@ -34,6 +34,8 @@ title: "商品一覧の実装"
 本アプリで商品一覧に使用しているカールセルは、10 個までしか表示できないためです。
 :::
 
+ここで設定した商品が、商品一覧として LINE に表示されます。
+
 ## 実装
 
 ### 商品一覧取得の実装
@@ -249,7 +251,6 @@ export const postbackProductsHandler = async (
 ```ts
 import { PostbackEvent } from "@line/bot-sdk";
 import { errorConsole } from "~/utils/util";
-import { postbackMypageHandler } from "./mypage";
 import { postbackProductsHandler } from "./products";
 
 export const postbackHandler = async (event: PostbackEvent): Promise<void> => {
@@ -275,15 +276,17 @@ import { msgError } from "~/notice-messages/error";
 
 import { followHandler } from "./follow";
 import { errorConsole } from "~/utils/util";
-import { postbackHandler } from "./postback";
+import { postbackHandler } from "./postback"; // ここを追加
 
 export const handlers = async (event: WebhookEvent): Promise<void> => {
   try {
     switch (event.type) {
       case "follow":
         return await followHandler(event);
+      /* ここから */
       case "postback":
         return await postbackHandler(event);
+      /* ここまで */
     }
   } catch (err) {
     lineClient.pushMessage(event.source.userId!, msgError).catch;
@@ -297,7 +300,30 @@ export const handlers = async (event: WebhookEvent): Promise<void> => {
 
 ![](https://storage.googleapis.com/zenn-user-upload/e6b48ae1fb18-20230909.jpg =300x)
 
+ここまでのコードは以下のコミットになります。
+
+https://github.com/hyodoblog/line-stripe-not-db-ec/commit/ee117aae3511c559eb8559540b7b6a0e5f0b6322
+
 ### 商品詳細取得の実装
+
+Stripe に登録した商品詳細情報を取得するには、`Stripe Price API`を使用します。
+`src/domains/price.domain.ts`ファイルを作成し以下のコードを記述します。
+
+```ts
+import Stripe from "stripe";
+import { stripeClient } from "~/clients/stripe.client";
+
+export const getPricesByProductId = async (
+  productId: string
+): Promise<Stripe.Price[]> => {
+  const { data } = await stripeClient.prices.search({
+    query: `product: '${productId}'`,
+  });
+  return data;
+};
+```
+
+`getPricesByProductId`関数を使えば、Stripe ダッシュボードに追加した商品情報と料金情報の取得ができます。
 
 次に商品詳細を表示するために、以下のファイルを作成してください。
 
@@ -508,5 +534,9 @@ export const postbackProductsHandler = async (
 これで商品一覧の「詳細を見る」ボタンを押すと、Stripe に登録した商品の詳細が表示されます。
 
 ![](https://storage.googleapis.com/zenn-user-upload/044f92ddef3a-20230909.jpg =300x)
+
+ここまでのコードは以下のコミットになります。
+
+https://github.com/hyodoblog/line-stripe-not-db-ec/commit/c09e72c30db690b8eb37d48d06c2fc7e8a744c65
 
 それでは次から決済処理を実装していきます。
