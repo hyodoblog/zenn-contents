@@ -70,7 +70,11 @@ STRIPE_SECRET_KEY=
 以下のコマンドをターミナルに入力してください。
 
 ```bash
+npm i
 npm run dev
+or
+yarn
+yarn dev
 ```
 
 以下のようなログが出力されたら成功です。
