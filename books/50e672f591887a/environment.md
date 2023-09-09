@@ -48,9 +48,9 @@ https://www.youtube.com/watch?v=AmguoMbHQy4
 
 1. [Stripe Dashboard](https://dashboard.stripe.com/dashboard/)にアクセス
 2. アカウントを作成
-3. シークレットキーを発行
-4. アクセストークンを発行
-5. `.env`ファイル内の`LINE_MESSAGING_CHANNEL_SECRET`と`LINE_MESSAGING_CHANNEL_ACCESS_TOKEN`に設定
+3. 「開発者」→「API」に移動
+4. シークレットキーを発行
+5. `.env`ファイル内の`STRIPE_SECRET_KEY`に設定
 
 上記で発行したキーを以下に設定します。
 
