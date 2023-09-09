@@ -2,7 +2,10 @@
 title: "Ngrok を使ったローカル開発環境の構築"
 ---
 
+こちらのセクションでは、Ngrok を使ってローカル開発環境を構築する方法を紹介します。
+
 過去に書いた記事があるのでこちらを参照するか、以下の手順に従ってください。
+
 https://zenn.dev/hyodoblog/articles/c1b2d6f6135af7
 
 ## Ngrok のインストール（Mac)
@@ -60,3 +63,29 @@ Ngrok が起動するリージョンの指定ができます。
 | `in`     | India         |
 
 デフォルトが`us`なため、ネットワーク回線の遅いところだと少し遅く感じるかもしれません。
+
+## Ngrok と LINE Bot の連携
+
+Ngrok と Express を起動し、URL をコピーしてください。
+
+上記の設定を例にすると以下の URL になります。
+
+```bash
+https://8e28278045ce.ngrok.io/line-bot
+```
+
+先程作成した LINE Developers Console の Messaging API を開き、「Messaging API 設定」ページに移動します。
+
+![](https://storage.googleapis.com/zenn-user-upload/edf0ba3c4ce1-20230909.png)
+
+少し下に移動すると、「Webhook 設定」の項目があるので、こちらの URL に先程コピーした URL を貼り付け、「Webhook の利用」をオンにします。
+
+![](https://storage.googleapis.com/zenn-user-upload/25fe71fc8795-20230909.png)
+
+「Webhook URL を検証」を押すと、LINE Developers Console から Webhook に対してリクエストが送信されます。
+
+正常に動作していれば以下のように表示されます。
+
+![](https://storage.googleapis.com/zenn-user-upload/961ffd89f1a2-20230909.png)
+
+以上で LINE Bot と Ngrok の連携は完了です。
