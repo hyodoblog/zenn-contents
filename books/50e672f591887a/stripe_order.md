@@ -147,3 +147,7 @@ export const msgMypage = (uri: string): FlexMessage => {
 ![](https://storage.googleapis.com/zenn-user-upload/4cc68cd73d2a-20230909.jpg =300x)
 
 以上、注文履歴の実装は完了です。
+
+ここまでのコードは、以下のコミットで確認できます。
+
+https://github.com/hyodoblog/line-stripe-not-db-ec/commit/6d4dc3fb84ca727d22673581587919350c4200a2

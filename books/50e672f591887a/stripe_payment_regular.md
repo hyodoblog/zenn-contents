@@ -149,3 +149,7 @@ export const postbackProductsHandler = async (
 ![](https://storage.googleapis.com/zenn-user-upload/9bbb6b3397fe-20230909.jpg =300x)
 
 以上で、定期購入処理の実装は完了です。
+
+ここまでのコードは、以下のコミットで確認できます。
+
+https://github.com/hyodoblog/line-stripe-not-db-ec/commit/cbd7e6d61a55e30679b3ce3327a63137a67c914d

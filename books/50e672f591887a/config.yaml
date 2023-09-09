@@ -14,3 +14,4 @@ chapters:
   - stripe_payment_onetime
   - stripe_payment_regular
   - stripe_order
+  - finish
