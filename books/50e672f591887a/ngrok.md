@@ -2,7 +2,7 @@
 title: "Ngrok を使ったローカル開発環境の構築"
 ---
 
-過去に書いた記事があるのでこちらを参照してください。
+過去に書いた記事があるのでこちらを参照するか、以下の手順に従ってください。
 https://zenn.dev/hyodoblog/articles/c1b2d6f6135af7
 
 ## Ngrok のインストール（Mac)
@@ -21,17 +21,17 @@ VSCode であれば以下のようにターミナルを画面分割で表示す�
 
 ![](https://storage.googleapis.com/zenn-user-upload/b0c13082502d-20220413.png)
 
-1. functions の emulator を起動する
+1. Express を起動する
 2. Ngrok を起動する
 
 Ngrok を起動する際の注意点はポート番号の指定です。
-Firebase Functions Emulator のデフォルトポート番号は 5001 番なので以下のようにコマンドを叩けば問題なく動きます。
+Express のデフォルトポート番号を 5001 番に設定しているため、以下のようにコマンドを叩けば問題なく動きます。
 
 ```bash
 ngrok http 5001
 ```
 
-起動すると公開用の URL が発行されるのでこちらのドメイン + Firebase Functions の相対パスを webhook に設定すれば簡単に LINE Bot のデバッグ環境が整います。
+起動すると公開用の URL が発行されるのでこちらのドメイン + 相対パスを webhook に設定すれば、LINE Bot が機能します。
 
 ![](https://storage.googleapis.com/zenn-user-upload/4bb22921d07b-20220413.png)
 

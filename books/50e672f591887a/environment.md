@@ -1,6 +1,14 @@
 ---
-title: "環境変数の用意"
+title: "プロジェクトの初期化と環境変数の用意"
 ---
+
+## プロジェクトの初期化
+
+まずは、プロジェクトを初期化します。
+
+以下のリポジトリよりソースコードをダウンロードしてください。
+
+https://github.com/hyodoblog/line-stripe-not-db-ec/releases/tag/init
 
 ## 環境変数を設定
 
