@@ -2,6 +2,8 @@
 title: "リッチメニューの設定"
 ---
 
+こちらのセクションでは、リッチメニューの設定を行います。
+
 ## リッチメニューとは
 
 リッチメニューとは、LINE のチャット画面上に表示されるメニューのことで、トーク画面下部（キーボードエリア）に固定で表示されるメニュー機能です。
@@ -13,30 +15,45 @@ https://www.linebiz.com/jp/column/technique/20180731-01/
 ## リッチメニューを設定
 
 本アプリでは以下の画像をリッチメニュー画像として利用します。（ご自身で用意しても大丈夫です）
-保存してください。
+
+こちらが用意したテンプレートをダウンロードしている場合、`assets/rich-menu.png`に保存されています。
 
 ![](https://storage.googleapis.com/zenn-user-upload/f35ba5335b3e-20230908.png)
 
-`src/migrations/rich-menu/index.ts`ファイルを作成し、以下のコードを記述します。
+以下のコマンドをターミナルで実行します。
+
+```bash
+yarn init:richmenu
+```
+
+作成した LINE 公式アカウントに移動し、リッチメニューが設定されていることを確認します。
+
+## 解説
+
+リッチメニューを設定するためのコードは`src/migrations/rich-menu/index.ts`にあり、以下がメイン関数です。
 
 ```ts
-import "../../alias";
+(async () => {
+  try {
+    await allDeleteRichmenu();
 
-import { RichMenu } from "@line/bot-sdk";
-import { readFileSync } from "fs";
-import { join } from "path";
-import { lineClient } from "~/clients/line.client";
-import { defaultRichMenu } from "./default";
+    const imgPath = join(__dirname, "../../../assets/rich-menu.png");
+    await createRichmenu(imgPath, defaultRichMenu, true);
 
-const allDeleteRichmenu = async (): Promise<void> => {
-  const richmenuIds: string[] = (await lineClient.getRichMenuList()).map(
-    (value) => value.richMenuId
-  );
-  await Promise.all(
-    richmenuIds.map((richmenuId) => lineClient.deleteRichMenu(richmenuId))
-  );
-};
+    console.info("finish.");
+  } catch (err) {
+    console.error(err);
+  }
+})();
+```
 
+1. 登録中のリッチメニューを全て削除
+2. 画像データのパスを設定
+3. リッチメニューを作成
+
+リッチメニューを作成する関数は以下のようになっています。
+
+```ts
 const createRichmenu = async (
   imgPath: string,
   richmenu: RichMenu,
@@ -53,22 +70,19 @@ const createRichmenu = async (
 
   return richmenuId;
 };
-
-(async () => {
-  try {
-    await allDeleteRichmenu();
-
-    const imgPath = join(__dirname, "../../../assets/rich-menu.png");
-    await createRichmenu(imgPath, defaultRichMenu, true);
-
-    console.info("finish.");
-  } catch (err) {
-    console.error(err);
-  }
-})();
 ```
 
-`src/migrations/rich-menu/default.ts`ファイルを作成し、以下のコードを記述します。
+1. 画像データを Buffer で読み込み
+2. リッチメニューの座標とアクションデータを設定
+3. リッチメニューに画像をアタッチ
+
+このような流れになってます。
+
+リッチメニューは複数設定することもあるため、友だち登録時に表示するデフォルトのリッチメニューを設定するために`isDefault`という引数を設けて、`setDefaultRichMenu`関数でデフォルトのリッチメニューを設定しています。
+
+### リッチメニューの座標とアクションデータ
+
+`src/migrations/rich-menu/default.ts`ファイルにリッチメニューの座標とアクションデータが存在します。
 
 ```ts
 import { RichMenu } from "@line/bot-sdk";
@@ -136,10 +150,10 @@ export const defaultRichMenu: RichMenu = {
 };
 ```
 
-以下のコマンドをターミナルで実行します。
+リッチメニューは LINE Official Account Manager からも設定できますが、こちらの方法を使うとコードで管理できるため、開発効率が上がります。
 
-```bash
-yarn init:richmenu
-```
+また、`action`内の`postback`という機能は LINE Official Account Manager では設定できない機能なため、ソースコードで設定することが多いです。
 
-作成した LINE 公式アカウントに移動し、リッチメニューが設定されていることを確認します。
+ポストバックアクションについては以下を参照してください。
+
+https://developers.line.biz/ja/docs/messaging-api/actions/#postback-action
