@@ -10,7 +10,6 @@ title: "環境変数の用意"
 - LINE_MESSAGING_CHANNEL_SECRET
 - LINE_FRIEND_URL
 - STRIPE_SECRET_KEY
-- STRIPE_WEBHOOK_SECRET
 
 上記 4 つのキーを LINE Developers Console と Stripe Dashboard から取得します。
 
@@ -43,21 +42,6 @@ https://www.youtube.com/watch?v=AmguoMbHQy4
 4. アクセストークンを発行
 5. `.env`ファイル内の`LINE_MESSAGING_CHANNEL_SECRET`と`LINE_MESSAGING_CHANNEL_ACCESS_TOKEN`に設定
 
-## Stripe Webhook の著名キーを発行
-
-https://www.youtube.com/watch?v=4ioVGxG8sQ0
-
-1. Stripe ダッシュボードより Webhook を 1 つ設定する。
-
-- エンドポイント URL は、仮で「https://example.com」を設定する。（stripeWebhook関数をこの後作成し、Functionsにデプロイしたエンドポイントを設定します。）
-- イベントに設定する。
-  - customer.subscription.created
-  - customer.subscription.deleted
-  - invoice.payment_succeeded
-
-2. 著名コードを発行
-3. `.env`ファイル内の`STRIPE_WEBHOOK_SECRET`に著名コードを設定
-
 上記で発行したキーを以下に設定します。
 
 ```bash
@@ -66,7 +50,6 @@ LINE_MESSAGING_CHANNEL_SECRET=
 LINE_FRIEND_URL=
 
 STRIPE_SECRET_KEY=
-STRIPE_WEBHOOK_SECRET=
 ```
 
 以上で環境構築は完了です。
