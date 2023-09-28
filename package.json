@@ -9,6 +9,6 @@
     "dev": "zenn preview --port 3000"
   },
   "dependencies": {
-    "zenn-cli": "^0.1.144"
+    "zenn-cli": "^0.1.146"
   }
 }
