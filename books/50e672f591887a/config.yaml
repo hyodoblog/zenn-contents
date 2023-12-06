@@ -2,7 +2,7 @@ title: "DBを利用せずLINE✕StripeでECアプリを作ってみよう！"
 summary: "DBを利用せずStripeの情報を軸に、LINE ECボットを作る本です。"
 topics: ["line", "stripe", "ec", "bot"]
 published: true
-price: 0
+price: 5000
 chapters:
   - introduction
   - process
