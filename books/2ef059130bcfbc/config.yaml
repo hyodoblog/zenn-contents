@@ -28,9 +28,8 @@ topics:
   - "firebase"
   - "ocr"
   - "typescript"
-  - "nodejs"
 published: true
-price: 1980
+price: 0
 toc_depth: 2
 chapters:
   - "53e942"
