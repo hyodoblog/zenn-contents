@@ -15,3 +15,4 @@ chapters:
   - stripe_payment_regular
   - stripe_order
   - finish
+publication_name: "yoshinani_dev"
