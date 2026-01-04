@@ -9,7 +9,7 @@
     "dev": "zenn preview --port 3000"
   },
   "dependencies": {
-    "zenn-cli": "^0.2.3"
+    "zenn-cli": "^0.2.11"
   },
-  "packageManager": "pnpm@10.17.0"
+  "packageManager": "pnpm@10.27.0"
 }
