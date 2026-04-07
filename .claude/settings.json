@@ -1,0 +1,8 @@
+{
+  "enabledMcpjsonServers": ["figma-mcp"],
+  "enableAllProjectMcpServers": true,
+  "hooks": {
+    "Stop": [],
+    "PreToolUse": []
+  }
+}
