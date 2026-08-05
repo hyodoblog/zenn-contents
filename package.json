@@ -11,5 +11,23 @@
   "dependencies": {
     "zenn-cli": "^0.2.3"
   },
-  "packageManager": "pnpm@10.17.0"
+  "packageManager": "pnpm@11.20.0",
+  "engines": {
+    "node": ">=24"
+  },
+  "pnpm": {
+    "allowBuilds": {
+      "@google/genai": false,
+      "@prisma/client": false,
+      "@prisma/engines": false,
+      "@tailwindcss/oxide": false,
+      "core-js": false,
+      "core-js-pure": false,
+      "esbuild": false,
+      "prisma": false,
+      "protobufjs": false,
+      "sharp": false,
+      "unrs-resolver": false
+    }
+  }
 }
