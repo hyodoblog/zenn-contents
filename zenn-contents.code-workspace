@@ -6,6 +6,21 @@
   ],
   "settings": {
     "editor.formatOnSave": true,
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/.next": true,
+      "**/.turbo": true,
+      "**/.vercel": true,
+      "**/dist": true
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/pnpm-lock.yaml": true,
+      "**/package-lock.json": true,
+      "**/.next": true,
+      "**/.turbo": true,
+      "**/dist": true
+    },
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.codeActionsOnSave": {
       "source.fixAll": "explicit"
