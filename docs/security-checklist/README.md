@@ -1,4 +1,4 @@
-# YOSHINANIセキュリティチェックリスト
+# システムセキュリティチェックリスト
 
 SaaS・業務システム向けの共通120項目と、ISMS取得企業向けの追加20項目を公開しています。
 
@@ -42,7 +42,7 @@ SaaS・業務システム向けの共通120項目と、ISMS取得企業向けの
 
 出典表示の例：
 
-> 出典：YOSHINANIセキュリティチェックリスト（公開版1.0）
+> 出典：システムセキュリティチェックリスト（公開版1.0）
 > https://github.com/hyodoblog/zenn-contents/tree/main/docs/security-checklist
 > CC BY 4.0。自社運用に合わせて一部改変。
 

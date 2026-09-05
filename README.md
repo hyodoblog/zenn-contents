@@ -39,7 +39,7 @@ npm run preview
 npm run textlint
 ```
 
-# YOSHINANIセキュリティチェックリスト
+# システムセキュリティチェックリスト
 
 SaaS・業務システム向けの共通120項目と、ISMS取得企業向けの追加20項目を公開しています。
 [詳細版と評価記録テンプレート](https://github.com/hyodoblog/zenn-contents/tree/main/docs/security-checklist)を参照してください。
