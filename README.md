@@ -39,6 +39,12 @@ npm run preview
 npm run textlint
 ```
 
+# YOSHINANIセキュリティチェックリスト
+
+SaaS・業務システム向けの共通120項目と、ISMS取得企業向けの追加20項目を公開しています。
+[詳細版と評価記録テンプレート](https://github.com/hyodoblog/zenn-contents/tree/main/docs/security-checklist)を参照してください。
+このディレクトリの独自作成文書には、商用利用も可能なCC BY 4.0を適用しています。
+
 # ライセンス
 
 1. 記事や本に載せているソースコードは、明記していない限り[MIT ライセンス](https://opensource.org/licenses/MIT)とします。
